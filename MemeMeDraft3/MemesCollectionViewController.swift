@@ -14,14 +14,24 @@ class MemesCollectionViewController: UICollectionViewController {
 
     var memes: [Meme]!
     
+    @IBOutlet weak var flowLayout: UICollectionViewFlowLayout!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         memes = appDelegate.memes
         
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "+", style: .plain, target: self, action: #selector(addMeme))
-        self.navigationItem.title = "Sent Memes"
+        let space:CGFloat = 3.0
+        let dimension = (view.frame.size.width - (2 * space)) / 3.0
+        
+        flowLayout.minimumInteritemSpacing = space
+        flowLayout.minimumLineSpacing = space
+        flowLayout.itemSize = CGSize(width: dimension, height: dimension)
+        
+        
+        //self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "+", style: .plain, target: self, action: #selector(addMeme))
+        //self.navigationItem.title = "Sent Memes"
         
         collectionView?.reloadData()
         
@@ -34,25 +44,7 @@ class MemesCollectionViewController: UICollectionViewController {
         // Do any additional setup after loading the view.
     }
 
-    @objc func addMeme(sender: Any) {
-        //performSegue(withIdentifier: "Segue1", sender: (Any).self)
-        
-    }
-        
-    
-    
-    
-    
-    
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using [segue destinationViewController].
-        // Pass the selected object to the new view controller.
-    }
-    */
+   
 
     // MARK: UICollectionViewDataSource
 
@@ -62,45 +54,29 @@ class MemesCollectionViewController: UICollectionViewController {
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MemeCollectionCell", for: indexPath)
-    
+        
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MemeCollectionCell", for: indexPath) as! MemeCollectionViewCell
+        
         // Configure the cell
         
         let memeForRow = self.memes[(indexPath as NSIndexPath).row]
-        //cell.memeImageView = memeForRow.memedImage
-    
+        cell.memeImageView.image = memeForRow.memedImage
+        
         return cell
     }
 
     // MARK: UICollectionViewDelegate
 
-    /*
-    // Uncomment this method to specify if the specified item should be highlighted during tracking
-    override func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    */
-
-    /*
-    // Uncomment this method to specify if the specified item should be selected
-    override func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    */
-
-    /*
-    // Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
-    override func collectionView(_ collectionView: UICollectionView, shouldShowMenuForItemAt indexPath: IndexPath) -> Bool {
-        return false
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, canPerformAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) -> Bool {
-        return false
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, performAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) {
+        // Implement DetailViewController
     
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let detailController = self.storyboard!.instantiateViewController(withIdentifier: "DetailViewController") as! DetailViewController
+        
+        detailController.detailImageView.image = self.memes[(indexPath as NSIndexPath).row].memedImage
+        detailController.detailLabel.text = "\(self.memes[(indexPath as NSIndexPath).row].topText)" + " \(self.memes[(indexPath as NSIndexPath).row].bottomText) "
+        
+        navigationController!.pushViewController(detailController, animated: true)
     }
-    */
 
 }
+

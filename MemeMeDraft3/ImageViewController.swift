@@ -270,6 +270,7 @@ class ViewController: UIViewController,  UIImagePickerControllerDelegate, UINavi
         topTextField.text = ""
         bottomTextField.text = ""
         
+        dismiss(animated: true, completion: nil)
     }
     
 }

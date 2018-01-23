@@ -18,9 +18,7 @@ class MemesTableViewController: UITableViewController {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         memes = appDelegate.memes
         
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "+", style: .plain, target: self, action: #selector(addMeme))
-        self.navigationItem.title = "Sent Memes"
-        
+
         tableView.reloadData()
         
         // Uncomment the following line to preserve selection between presentations
@@ -30,10 +28,6 @@ class MemesTableViewController: UITableViewController {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
 
-    
-    @objc func addMeme() {
-        
-    }
     
 
     // MARK: - Table view data source
@@ -56,7 +50,19 @@ class MemesTableViewController: UITableViewController {
         return cell
     }
     
-
+    
+    // Implement DetailViewcontroller
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let detailController = self.storyboard!.instantiateViewController(withIdentifier: "DetailViewController") as! DetailViewController
+        
+        detailController.detailImageView.image = self.memes[(indexPath as NSIndexPath).row].memedImage
+        detailController.detailLabel.text = "\(self.memes[(indexPath as NSIndexPath).row].topText)" + " \(self.memes[(indexPath as NSIndexPath).row].bottomText)"
+        
+        navigationController!.pushViewController(detailController, animated: true)
+    
+    }
+    
     /*
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
