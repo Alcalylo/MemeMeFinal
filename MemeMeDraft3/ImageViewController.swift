@@ -236,6 +236,7 @@ class ViewController: UIViewController,  UIImagePickerControllerDelegate, UINavi
     
     func save(memedImage: UIImage) {
         let meme = Meme(topText: topTextField.text!, bottomText: bottomTextField.text!, memeOriginal: imageView.image!, memedImage: generateMemedImage())
+    
         
         let object = UIApplication.shared.delegate
         let appDelegate = object as! AppDelegate
@@ -266,9 +267,6 @@ class ViewController: UIViewController,  UIImagePickerControllerDelegate, UINavi
     // Cancel the Meme
     
     @IBAction func cancelMeme(_ sender: Any) {
-        
-        topTextField.text = ""
-        bottomTextField.text = ""
         
         dismiss(animated: true, completion: nil)
     }

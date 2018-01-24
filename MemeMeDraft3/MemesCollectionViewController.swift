@@ -10,49 +10,58 @@ import UIKit
 
 
 
-class MemesCollectionViewController: UICollectionViewController {
-
+class MemesCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
+    
+    
+    
+    // MARK: Properties
+    
     var memes: [Meme]!
+    
+    fileprivate let sectionInsets = UIEdgeInsets(top: 50.0, left: 20.0, bottom: 50.0, right: 20.0)
+    
+    fileprivate let itemsPerRow: CGFloat = 3
+    
+    
+    
+    // MARK: Outlets
     
     @IBOutlet weak var flowLayout: UICollectionViewFlowLayout!
     
+    
+    
+    
+    //MARK : Life Cycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         memes = appDelegate.memes
         
-        let space:CGFloat = 3.0
-        let dimension = (view.frame.size.width - (2 * space)) / 3.0
-        
-        flowLayout.minimumInteritemSpacing = space
-        flowLayout.minimumLineSpacing = space
-        flowLayout.itemSize = CGSize(width: dimension, height: dimension)
-        
-        
-        //self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "+", style: .plain, target: self, action: #selector(addMeme))
-        //self.navigationItem.title = "Sent Memes"
-        
         collectionView?.reloadData()
         
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Register cell classes
-        //self.collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier:"")
-
-        // Do any additional setup after loading the view.
     }
-
-   
-
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        memes = appDelegate.memes
+        
+        collectionView!.reloadData()
+        
+    }
+    
+    
     // MARK: UICollectionViewDataSource
-
+    
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
         return self.memes.count
     }
-
+    
+    
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MemeCollectionCell", for: indexPath) as! MemeCollectionViewCell
@@ -62,21 +71,51 @@ class MemesCollectionViewController: UICollectionViewController {
         let memeForRow = self.memes[(indexPath as NSIndexPath).row]
         cell.memeImageView.image = memeForRow.memedImage
         
+        cell.memeImageView.contentMode = .scaleAspectFit
+        
         return cell
     }
-
-    // MARK: UICollectionViewDelegate
-
-        // Implement DetailViewController
+    
+    // Configure the Collection View
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        let paddingSpace = sectionInsets.left * (itemsPerRow + 1)
+        let availableWidth = view.frame.width - paddingSpace
+        let widthPerItem = availableWidth / itemsPerRow
+        
+        return CGSize(width: widthPerItem, height: widthPerItem)
+    }
+    
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        insetForSectionAt section: Int) -> UIEdgeInsets {
+        
+        return sectionInsets
+    }
+    
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        
+        return sectionInsets.left
+    }
+    
+    
+    
+    // MARK: Implement Detail View Controller
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let detailController = self.storyboard!.instantiateViewController(withIdentifier: "DetailViewController") as! DetailViewController
         
-        detailController.detailImageView.image = self.memes[(indexPath as NSIndexPath).row].memedImage
-        detailController.detailLabel.text = "\(self.memes[(indexPath as NSIndexPath).row].topText)" + " \(self.memes[(indexPath as NSIndexPath).row].bottomText) "
+        detailController.meme = self.memes[(indexPath as NSIndexPath).row]
         
         navigationController!.pushViewController(detailController, animated: true)
     }
-
+    
 }
 
