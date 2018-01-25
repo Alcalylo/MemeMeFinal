@@ -44,6 +44,7 @@ class ViewController: UIViewController,  UIImagePickerControllerDelegate, UINavi
         if show == true {
             topToolbar.isHidden = false
             bottomToolbar.isHidden = false
+            
         }
         else {
             topToolbar.isHidden = true
@@ -65,9 +66,7 @@ class ViewController: UIViewController,  UIImagePickerControllerDelegate, UINavi
         super.viewWillAppear(animated)
         
         imageView.contentMode = .scaleAspectFit
-        topTextField.contentMode = .scaleAspectFit
-        bottomTextField.contentMode = .scaleAspectFit
-        camera.isEnabled = UIImagePickerController.isSourceTypeAvailable(.camera)
+                camera.isEnabled = UIImagePickerController.isSourceTypeAvailable(.camera)
         subscribeToKeyboardNotifications()
         
     }
@@ -98,7 +97,9 @@ class ViewController: UIViewController,  UIImagePickerControllerDelegate, UINavi
         
         topTextField.delegate = upperTextField
         bottomTextField.delegate = lowerTextField
-        
+        topTextField.contentMode = .scaleAspectFit
+        bottomTextField.contentMode = .scaleAspectFit
+
         
         // Set Meme Styles
         
@@ -208,8 +209,8 @@ class ViewController: UIViewController,  UIImagePickerControllerDelegate, UINavi
     
     func unsubscribeFromKeyboardNotifications() {
         
-        NotificationCenter.default.removeObserver(self, name: .UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.removeObserver(self, name: .UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.removeObserver(self)
+        
     }
     
     

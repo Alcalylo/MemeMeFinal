@@ -11,16 +11,7 @@ import UIKit
 
 class TextFieldDelegate : NSObject, UITextFieldDelegate {
     
-    
     // Construct the text that will be in the field if this change is accepted
-    
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        
-        var newTopText = textField.text! as NSString
-        newTopText = newTopText.replacingCharacters(in: range, with: string) as NSString
-        
-        return true
-    }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
         textField.text = ""
@@ -33,6 +24,5 @@ class TextFieldDelegate : NSObject, UITextFieldDelegate {
         
         return true
     }
-    
     
 }
