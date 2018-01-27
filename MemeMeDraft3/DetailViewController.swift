@@ -14,26 +14,11 @@ class DetailViewController: UIViewController {
     
     @IBOutlet weak var detailImageView: UIImageView!
     
-    @IBOutlet weak var detailLabel: UILabel!
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         detailImageView.contentMode = .scaleAspectFit
         detailImageView.image = meme?.memedImage
-        //detailLabel.text = meme?.topText
     }
-    
-    
-    
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destinationViewController.
-     // Pass the selected object to the new view controller.
-     }
-     */
     
 }

@@ -20,8 +20,8 @@ class ViewController: UIViewController,  UIImagePickerControllerDelegate, UINavi
     @IBOutlet weak var topTextField: UITextField!
     @IBOutlet weak var bottomTextField: UITextField!
     @IBOutlet weak var topToolbar: UIToolbar!
-    @IBOutlet weak var Share: UIBarButtonItem!
-    @IBOutlet weak var Cancel: UIBarButtonItem!
+    @IBOutlet weak var shareButton: UIBarButtonItem!
+    @IBOutlet weak var cancelButton: UIBarButtonItem!
     
     
     // Configure TextFields and Buttons
@@ -31,9 +31,14 @@ class ViewController: UIViewController,  UIImagePickerControllerDelegate, UINavi
         if show == true {
             topTextField.isHidden = false
             bottomTextField.isHidden = false
-            Share.isEnabled = true
-            Cancel.isEnabled = true
+            cancelButton.isEnabled = true
         }
+       
+        if imageView.image == nil {
+            shareButton.isEnabled = false
+        }
+    
+    
     }
     
     
@@ -65,10 +70,10 @@ class ViewController: UIViewController,  UIImagePickerControllerDelegate, UINavi
         
         super.viewWillAppear(animated)
         
+        configureTextFieldsAndButtons(show: true)
         imageView.contentMode = .scaleAspectFit
-                camera.isEnabled = UIImagePickerController.isSourceTypeAvailable(.camera)
+        camera.isEnabled = UIImagePickerController.isSourceTypeAvailable(.camera)
         subscribeToKeyboardNotifications()
-        
     }
     
     
@@ -92,15 +97,12 @@ class ViewController: UIViewController,  UIImagePickerControllerDelegate, UINavi
     
     func configureTextFields(textField: UITextField, withText text: String) {
         
-        
         // Set TextField Delegate
         
         topTextField.delegate = upperTextField
         bottomTextField.delegate = lowerTextField
-        topTextField.contentMode = .scaleAspectFit
-        bottomTextField.contentMode = .scaleAspectFit
+       
 
-        
         // Set Meme Styles
         
         let memeTextAttributes:[String:Any] = [
@@ -109,12 +111,9 @@ class ViewController: UIViewController,  UIImagePickerControllerDelegate, UINavi
             NSAttributedStringKey.font.rawValue: UIFont(name: "HelveticaNeue-CondensedBlack", size: 40)!,
             NSAttributedStringKey.strokeWidth.rawValue: -3.0]
         
-        topTextField.defaultTextAttributes = memeTextAttributes
-        bottomTextField.defaultTextAttributes = memeTextAttributes
-        topTextField.textAlignment = NSTextAlignment.center
-        bottomTextField.textAlignment = NSTextAlignment.center
-        
-        
+        textField.defaultTextAttributes = memeTextAttributes
+        textField.textAlignment = NSTextAlignment.center
+        textField.contentMode = .scaleAspectFit
     }
     
     
@@ -122,15 +121,13 @@ class ViewController: UIViewController,  UIImagePickerControllerDelegate, UINavi
     
     func pickAnImage(source : UIImagePickerControllerSourceType) {
         
-        
         let imagePicker = UIImagePickerController()
         imagePicker.delegate = self
         imagePicker.sourceType = source
+        
         present(imagePicker, animated: true, completion: nil)
         
     }
-    
-    
     
     
     //Pick An Image From Album
@@ -154,13 +151,11 @@ class ViewController: UIViewController,  UIImagePickerControllerDelegate, UINavi
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         
-        
         if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
             
             imageView.image = image
             topTextField.text = "TOP"
             bottomTextField.text = "BOTTOM"
-            
         }
         
         dismiss(animated: true, completion: nil)
@@ -218,7 +213,6 @@ class ViewController: UIViewController,  UIImagePickerControllerDelegate, UINavi
     
     func generateMemedImage() -> UIImage {
         
-        
         configureToolbars(show: false)
         
         UIGraphicsBeginImageContext(self.view.frame.size)
@@ -228,7 +222,6 @@ class ViewController: UIViewController,  UIImagePickerControllerDelegate, UINavi
         
         configureToolbars(show: true)
         
-        
         return memedImage
     }
     
@@ -237,7 +230,6 @@ class ViewController: UIViewController,  UIImagePickerControllerDelegate, UINavi
     
     func save(memedImage: UIImage) {
         let meme = Meme(topText: topTextField.text!, bottomText: bottomTextField.text!, memeOriginal: imageView.image!, memedImage: generateMemedImage())
-    
         
         let object = UIApplication.shared.delegate
         let appDelegate = object as! AppDelegate

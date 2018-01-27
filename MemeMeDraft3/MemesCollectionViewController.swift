@@ -50,8 +50,8 @@ class MemesCollectionViewController: UICollectionViewController, UICollectionVie
         // Configure the cell
         
         let memeForRow = self.memes[(indexPath as NSIndexPath).row]
-        cell.memeImageView.image = memeForRow.memedImage
         
+        cell.memeImageView.image = memeForRow.memedImage
         cell.memeImageView.contentMode = .scaleAspectFit
         
         return cell
